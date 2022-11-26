@@ -56,4 +56,11 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  async hashData(data: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    const hash = await bcrypt.hash(data, salt);
+
+    return hash;
+  }
 }
