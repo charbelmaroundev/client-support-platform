@@ -39,4 +39,21 @@ export class AuthService {
 
     return user;
   }
+
+  async signin(body: SignInDto) {
+    const { email, password } = body;
+    const checkEmail = await this.userModel.findOne({ email });
+
+    if (!checkEmail) throw new ForbiddenException('Credentials incorrect');
+
+    const isMatch = await bcrypt.compare(password, checkEmail.password);
+
+    if (!isMatch) throw new ForbiddenException('Credentials incorrect');
+
+    const payload = { id: checkEmail.id };
+
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
 }
