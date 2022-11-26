@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signin.dto';
 import { SignUpDto } from './dto/signup.dto';
 import { Public } from './decorators/public.decorator';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { User } from './schemas/user.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -20,8 +22,8 @@ export class AuthController {
     return this.authService.signin(body);
   }
 
-  @Get()
-  test() {
-    console.log('TEST');
+  @Get('me')
+  whoami(@CurrentUser() user: User) {
+    return this.authService.whoami(user.id);
   }
 }
