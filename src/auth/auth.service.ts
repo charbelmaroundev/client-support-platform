@@ -63,4 +63,8 @@ export class AuthService {
 
     return hash;
   }
+
+  async checkUser(id: string): Promise<User | null> {
+    return this.userModel.findById(id);
+  }
 }
