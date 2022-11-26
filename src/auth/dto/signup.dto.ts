@@ -11,27 +11,27 @@ import {
 export class SignUpDto {
   @IsNotEmpty()
   @IsString()
-  firstName: string;
+  readonly firstName: string;
 
   @IsNotEmpty()
   @IsString()
-  lastName: string;
+  readonly lastName: string;
 
   @IsEmail()
-  email: string;
+  readonly email: string;
 
   @MinLength(8)
   @IsString()
   @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
     message: 'password too weak',
   })
-  password: string;
+  readonly password: string;
 
   @IsOptional()
   @IsBoolean()
-  isVIP: boolean;
+  readonly isVIP: boolean;
 
   @IsOptional()
   @IsBoolean()
-  isAdmin: boolean;
+  readonly isAdmin: boolean;
 }
