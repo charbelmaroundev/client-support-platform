@@ -10,6 +10,7 @@ import { SignUpDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dto/signin.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class AuthService {
@@ -57,6 +58,12 @@ export class AuthService {
     };
   }
 
+  async whoami(id: string): Promise<User> {
+    const user = await this.checkUser(id);
+
+    return user;
+  }
+
   async hashData(data: string): Promise<string> {
     const salt = await bcrypt.genSalt();
     const hash = await bcrypt.hash(data, salt);
@@ -64,7 +71,11 @@ export class AuthService {
     return hash;
   }
 
-  async checkUser(id: string): Promise<User | null> {
-    return this.userModel.findById(id);
+  async checkUser(id: string): Promise<User> {
+    const user = await this.userModel.findById(id);
+
+    if (!user) throw new UnauthorizedException();
+
+    return user;
   }
 }
