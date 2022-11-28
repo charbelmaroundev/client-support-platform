@@ -11,10 +11,12 @@ import {
 export class SignUpDto {
   @IsNotEmpty()
   @IsString()
+  @MinLength(3)
   readonly firstName: string;
 
   @IsNotEmpty()
   @IsString()
+  @MinLength(3)
   readonly lastName: string;
 
   @IsEmail()
