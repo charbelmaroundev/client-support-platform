@@ -4,10 +4,11 @@ import { SignInDto } from './dto/signin.dto';
 import { SignUpDto } from './dto/signup.dto';
 import { Public } from './decorators/public.decorator';
 import { CurrentUser } from './decorators/current-user.decorator';
-import { User } from './schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { Serialize } from '../interceptor/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 import { WhoAmIDto } from './dto/who-am-i.dto';
+import { TokenDto } from './dto/token.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,7 +23,7 @@ export class AuthController {
 
   @Public()
   @Post('signin')
-  @Serialize(UserDto)
+  @Serialize(TokenDto)
   signin(@Body() body: SignInDto) {
     return this.authService.signin(body);
   }
