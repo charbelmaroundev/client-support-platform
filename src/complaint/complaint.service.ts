@@ -36,4 +36,91 @@ export class ComplaintService {
 
     return { total: complaints.length, complaints };
   }
+
+  async findAll(query: StatusAndSortDto): Promise<Object> {
+    console.log(query);
+
+    const { status, sort }: { status: Status; sort: Sort } = query;
+
+    let sortBy: number | undefined;
+    if (!sort) sortBy = 1;
+    if (sort) sortBy = sort.toString() === 'ASC' ? 1 : -1;
+
+    const stages: any[] = [
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'creator',
+          foreignField: '_id',
+          as: 'user',
+          pipeline: [
+            {
+              $project: {
+                _id: 0,
+                firstName: 1,
+                lastName: 1,
+                email: 1,
+                isVIP: 1,
+              },
+            },
+          ],
+        },
+      },
+
+      { $unwind: '$user' },
+
+      {
+        $sort: {
+          createdAt: sortBy,
+        },
+      },
+
+      {
+        $group: {
+          _id: '$user.isVIP',
+          data: {
+            $push: {
+              title: '$title',
+              body: '$body',
+              createdDate: {
+                $dateToString: {
+                  format: '%Y-%m-%dT%H:%M:%S',
+                  date: '$createdAt',
+                },
+              },
+              status: '$status',
+              user: '$user',
+            },
+          },
+        },
+      },
+
+      {
+        $project: {
+          'data.user.isVIP': 0,
+        },
+      },
+    ];
+
+    if (status) {
+      stages.unshift({ $match: { status } });
+    }
+
+    const complaint = await this.complaintModel.aggregate(stages);
+
+    if (!complaint.length) return { message: 'Complaint not found' };
+
+    let complaints: Object;
+    if (complaint[0]._id === true) {
+      complaints = { vip: complaint[0]?.data, nonVip: complaint[1]?.data };
+    } else {
+      complaints = { vip: complaint[1]?.data, nonVip: complaint[0]?.data };
+    }
+
+    return complaints;
+  }
+
+  // // findOne(id: number) {
+  // //   return `This action returns a #${id} complaint`;
+  // // }
 }
