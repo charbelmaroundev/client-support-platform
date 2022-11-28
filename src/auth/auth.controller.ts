@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signin.dto';
 import { SignUpDto } from './dto/signup.dto';
@@ -17,20 +17,21 @@ export class AuthController {
   @Public()
   @Post('signup')
   @Serialize(UserDto)
-  signup(@Body() body: SignUpDto) {
+  signup(@Body() body: SignUpDto): Promise<UserDto> {
     return this.authService.signup(body);
   }
 
   @Public()
   @Post('signin')
   @Serialize(TokenDto)
-  signin(@Body() body: SignInDto) {
+  @HttpCode(200)
+  signin(@Body() body: SignInDto): Promise<TokenDto> {
     return this.authService.signin(body);
   }
 
   @Get('me')
   @Serialize(WhoAmIDto)
-  whoami(@CurrentUser() user: User) {
+  whoami(@CurrentUser() user: User): Promise<User> {
     return this.authService.whoami(user.id);
   }
 }
