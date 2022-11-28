@@ -50,4 +50,24 @@ export class ComplaintController {
   findAll(@Query() query: StatusAndSortDto): Promise<Object> {
     return this.complaintService.findAll(query);
   }
+
+  @Patch(':id')
+  @HttpCode(204)
+  @UseGuards(AdminGuard)
+  update(
+    @Param() param: ObjectIdDto,
+    @Body() updateComplaintDto: StatusDto
+  ): Promise<void> {
+    return this.complaintService.update(param.id, updateComplaintDto);
+  }
+
+  // // @Get(':id')
+  // // findOne(@Param('id') id: string) {
+  // //   return this.complaintService.findOne(+id);
+  // // }
+
+  // // @Delete(':id')
+  // // remove(@Param('id') id: string) {
+  // //   return this.complaintService.remove(+id);
+  // // }
 }
