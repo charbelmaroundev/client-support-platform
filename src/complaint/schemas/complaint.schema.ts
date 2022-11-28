@@ -14,22 +14,21 @@ export enum Sort {
   DESC = 'DESC',
 }
 
-@Schema()
+@Schema({ timestamps: true })
 export class Complaint extends Document {
-  @Prop({ required: true })
-  title: string;
+  @Prop({ required: true, minlength: 3 })
+  readonly title: string;
 
-  @Prop({ required: true })
-  body: string;
-
-  @Prop({ default: Date.now() })
-  createdDate: Date;
+  @Prop({ required: true, minlength: 3 })
+  readonly body: string;
 
   @Prop({ default: Status.PENDING })
-  status: Status;
+  readonly status: Status;
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'user' })
-  creator: User;
+  @Prop({ required: true, type: SchemaTypes.ObjectId, ref: 'user' })
+  readonly creator: User;
 }
 
 export const ComplaintSchema = SchemaFactory.createForClass(Complaint);
+
+ComplaintSchema.index({ status: 1 });
