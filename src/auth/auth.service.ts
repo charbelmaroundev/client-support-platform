@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from './schemas/user.schema';
+import { User } from 'src/user/schemas/user.schema';
 import { SignUpDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dto/signin.dto';
