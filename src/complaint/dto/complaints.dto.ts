@@ -3,9 +3,9 @@ import { ComplaintDto } from './complaint.dto';
 
 export class ComplaintsDto {
   @Expose()
-  total: number;
+  readonly total: number;
 
   @Expose()
   @Type(() => ComplaintDto)
-  complaints: [ComplaintDto];
+  readonly complaints: [ComplaintDto];
 }

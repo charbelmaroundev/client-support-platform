@@ -4,22 +4,29 @@ import { Document } from 'mongoose';
 @Schema({ timestamps: true })
 export class User extends Document {
   @Prop({ trim: true, required: true })
-  firstName: string;
+  readonly firstName: string;
 
   @Prop({ trim: true, required: true })
-  lastName: string;
+  readonly lastName: string;
 
   @Prop({ trim: true, unique: true, lowercase: true, required: true })
-  email: string;
+  readonly email: string;
 
-  @Prop({ trim: true, required: true, minlength: 8 })
-  password: string;
+  @Prop({
+    trim: true,
+    required: true,
+    minlength: 8,
+    match: /((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+  })
+  readonly password: string;
 
   @Prop({ default: false })
-  isAdmin: boolean;
+  readonly isAdmin: boolean;
 
   @Prop({ default: false })
-  isVIP: boolean;
+  readonly isVIP: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.index({ email: 1 });

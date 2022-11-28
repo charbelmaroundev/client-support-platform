@@ -1,21 +1,22 @@
 import { Expose } from 'class-transformer';
+import { ObjectId } from 'mongoose';
 
 export class WhoAmIDto {
   @Expose()
-  _id: string;
+  readonly id: ObjectId;
 
   @Expose()
-  firstName: string;
+  readonly firstName: string;
 
   @Expose()
-  lastName: string;
+  readonly lastName: string;
 
   @Expose()
-  email: string;
+  readonly email: string;
 
   @Expose()
-  isVIP: boolean;
+  readonly isVIP: boolean;
 
   @Expose()
-  isAdmin: boolean;
+  readonly isAdmin: boolean;
 }

@@ -3,5 +3,5 @@ import { IsObjectId } from 'class-validator-mongo-object-id';
 
 export class ObjectIdDto {
   @IsObjectId({ message: 'Param should be an objectId' })
-  id: ObjectId;
+  readonly id: ObjectId;
 }

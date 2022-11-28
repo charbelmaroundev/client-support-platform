@@ -4,11 +4,11 @@ import { Status } from '../schemas/complaint.schema';
 @Expose()
 export class ComplaintDto {
   @Expose()
-  title: string;
+  readonly title: string;
 
   @Expose()
-  body: string;
+  readonly body: string;
 
   @Expose()
-  status: Status;
+  readonly status: Status;
 }

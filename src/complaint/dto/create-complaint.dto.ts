@@ -1,11 +1,13 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class CreateComplaintDto {
   @IsString()
   @IsNotEmpty()
-  title: string;
+  @MinLength(3)
+  readonly title: string;
 
   @IsString()
   @IsNotEmpty()
-  body: string;
+  @MinLength(3)
+  readonly body: string;
 }

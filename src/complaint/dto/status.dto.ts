@@ -5,7 +5,7 @@ export class StatusDto {
   @IsEnum(Status, {
     message: `Status should be ${Status.INPROGRESS}, ${Status.PENDING}, ${Status.REJECTED}, ${Status.RESOLVED}!`,
   })
-  status: Status;
+  readonly status: Status;
 }
 
 export class StatusAndSortDto {
@@ -13,11 +13,11 @@ export class StatusAndSortDto {
   @IsEnum(Status, {
     message: `Status should be ${Status.INPROGRESS}, ${Status.PENDING}, ${Status.REJECTED}, ${Status.RESOLVED}!`,
   })
-  status: Status;
+  readonly status: Status;
 
   @IsOptional()
   @IsEnum(Sort, {
-    message: `Status should be ${Sort.ASC}, ${Sort.DESC}!`,
+    message: `Sorting by ${Sort.ASC} or ${Sort.DESC}!`,
   })
-  sort: Status;
+  readonly sort: Sort;
 }
