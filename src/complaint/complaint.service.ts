@@ -123,4 +123,23 @@ export class ComplaintService {
   // // findOne(id: number) {
   // //   return `This action returns a #${id} complaint`;
   // // }
+
+  async update(id: ObjectId, updateComplaintDto: StatusDto): Promise<void> {
+    const { status }: { status: Status } = updateComplaintDto;
+    await this.checkComplaint(id);
+
+    await this.complaintModel.updateOne({ _id: id }, { $set: { status } });
+  }
+
+  // // remove(id: number) {
+  // //   return `This action removes a #${id} complaint`;
+  // // }
+
+  async checkComplaint(id: ObjectId): Promise<Complaint | object> {
+    const complaint: Complaint = await this.complaintModel.findById(id);
+
+    if (!complaint) return { message: 'Complaint not found' };
+
+    return complaint;
+  }
 }
