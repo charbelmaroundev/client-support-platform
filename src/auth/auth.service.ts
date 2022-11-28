@@ -11,6 +11,8 @@ import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dto/signin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
+import { UserDto } from './dto/user.dto';
+import { TokenDto } from './dto/token.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,17 +21,31 @@ export class AuthService {
     @InjectModel('user') private readonly userModel: Model<User>
   ) {}
 
-  async signup(body: SignUpDto) {
-    const { firstName, lastName, email, password, isAdmin, isVIP } = body;
+  async signup(body: SignUpDto): Promise<UserDto> {
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      isAdmin,
+      isVIP,
+    }: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+      isAdmin: boolean;
+      isVIP: boolean;
+    } = body;
 
-    const checkEmail = await this.userModel.findOne({ email });
+    const checkEmail: User | null = await this.checkUserByEmail(email);
 
     if (checkEmail)
       throw new ConflictException('User with such email already exist');
 
     const hashedPassword: string = await this.hashData(password);
 
-    const user = await this.userModel.create({
+    const user: User = await this.userModel.create({
       firstName,
       lastName,
       email,
@@ -41,17 +57,20 @@ export class AuthService {
     return user;
   }
 
-  async signin(body: SignInDto) {
-    const { email, password } = body;
-    const checkEmail = await this.userModel.findOne({ email });
+  async signin(body: SignInDto): Promise<TokenDto> {
+    const { email, password }: { email: string; password: string } = body;
+    const checkEmail: User | null = await this.checkUserByEmail(email);
 
-    if (!checkEmail) throw new ForbiddenException('Credentials incorrect');
+    if (!checkEmail) this.CredentialIncorrect();
 
-    const isMatch = await bcrypt.compare(password, checkEmail.password);
+    const isMatch: boolean = await bcrypt.compare(
+      password,
+      checkEmail.password
+    );
 
-    if (!isMatch) throw new ForbiddenException('Credentials incorrect');
+    if (!isMatch) this.CredentialIncorrect();
 
-    const payload = { id: checkEmail.id };
+    const payload: object = { id: checkEmail.id };
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -59,22 +78,32 @@ export class AuthService {
   }
 
   async whoami(id: string): Promise<User> {
-    const user = await this.checkUser(id);
+    const user: User = await this.checkUser(id);
 
     return user;
   }
 
+  CredentialIncorrect() {
+    throw new ForbiddenException('Credentials incorrect');
+  }
+
   async hashData(data: string): Promise<string> {
-    const salt = await bcrypt.genSalt();
-    const hash = await bcrypt.hash(data, salt);
+    const salt: string = await bcrypt.genSalt();
+    const hash: string = await bcrypt.hash(data, salt);
 
     return hash;
   }
 
   async checkUser(id: string): Promise<User> {
-    const user = await this.userModel.findById(id);
+    const user: User = await this.userModel.findById(id);
 
     if (!user) throw new UnauthorizedException();
+
+    return user;
+  }
+
+  async checkUserByEmail(email: string): Promise<User | null> {
+    const user = await this.userModel.findOne({ email });
 
     return user;
   }
