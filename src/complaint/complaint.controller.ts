@@ -37,4 +37,11 @@ export class ComplaintController {
   ): Promise<ComplaintDto> {
     return this.complaintService.create(createComplaintDto, user.id);
   }
+
+  @Get()
+  @Serialize(ComplaintsDto)
+  @UseGuards(ClientGuard)
+  findAllByUserId(@CurrentUser() user: User): Promise<ComplaintsDto | Object> {
+    return this.complaintService.findAllByUserId(user.id);
+  }
 }
