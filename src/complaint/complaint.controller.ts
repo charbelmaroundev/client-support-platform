@@ -44,4 +44,10 @@ export class ComplaintController {
   findAllByUserId(@CurrentUser() user: User): Promise<ComplaintsDto | Object> {
     return this.complaintService.findAllByUserId(user.id);
   }
+
+  @Get('admin')
+  @UseGuards(AdminGuard)
+  findAll(@Query() query: StatusAndSortDto): Promise<Object> {
+    return this.complaintService.findAll(query);
+  }
 }
