@@ -26,4 +26,14 @@ export class ComplaintService {
 
     return complaint;
   }
+
+  async findAllByUserId(id: ObjectId): Promise<ComplaintsDto | Object> {
+    const complaints: Complaint[] = await this.complaintModel.find({
+      creator: id,
+    });
+
+    if (!complaints.length) return { message: 'Complaint not found' };
+
+    return { total: complaints.length, complaints };
+  }
 }
