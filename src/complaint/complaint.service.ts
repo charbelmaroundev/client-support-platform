@@ -2,14 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateComplaintDto } from './dto/create-complaint.dto';
 import { Model, ObjectId } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { Complaint, Status, Sort } from './schemas/complaint.schema';
+import { Complaint } from './schemas/complaint.schema';
+import { Status, Sort } from 'src/types/index.type';
 import { StatusDto, StatusAndSortDto } from './dto/status.dto';
 import { ComplaintsDto } from './dto/complaints.dto';
 
 @Injectable()
 export class ComplaintService {
   constructor(
-    @InjectModel('complaint') private readonly complaintModel: Model<Complaint>
+    @InjectModel('Complaint') private readonly complaintModel: Model<Complaint>
   ) {}
 
   async create(
@@ -27,12 +28,21 @@ export class ComplaintService {
     return complaint;
   }
 
-  async findAllByUserId(id: ObjectId): Promise<ComplaintsDto | Object> {
-    const complaints: Complaint[] = await this.complaintModel.find({
-      creator: id,
-    });
+  async findAllByUserId(
+    id: ObjectId,
+    page: number,
+    limit: number
+  ): Promise<ComplaintsDto> {
+    const offset: number = (page - 1) * limit;
 
-    if (!complaints.length) return { message: 'Complaint not found' };
+    const complaints: Complaint[] = await this.complaintModel
+      .find({
+        creator: id,
+      })
+      .limit(limit)
+      .skip(offset);
+
+    if (!complaints.length) throw new NotFoundException('Complaint not found');
 
     return { total: complaints.length, complaints };
   }
@@ -44,7 +54,7 @@ export class ComplaintService {
 
     let sortBy: number | undefined;
     if (!sort) sortBy = 1;
-    if (sort) sortBy = sort.toString() === 'ASC' ? 1 : -1;
+    if (sort) sortBy = sort.toString() === 'asc' ? 1 : -1;
 
     const stages: any[] = [
       {
@@ -108,7 +118,7 @@ export class ComplaintService {
 
     const complaint = await this.complaintModel.aggregate(stages);
 
-    if (!complaint.length) return { message: 'Complaint not found' };
+    if (!complaint.length) throw new NotFoundException('Complaint not found');
 
     let complaints: Object;
     if (complaint[0]._id === true) {
@@ -120,10 +130,6 @@ export class ComplaintService {
     return complaints;
   }
 
-  // // findOne(id: number) {
-  // //   return `This action returns a #${id} complaint`;
-  // // }
-
   async update(id: ObjectId, updateComplaintDto: StatusDto): Promise<void> {
     const { status }: { status: Status } = updateComplaintDto;
     await this.checkComplaint(id);
@@ -131,14 +137,10 @@ export class ComplaintService {
     await this.complaintModel.updateOne({ _id: id }, { $set: { status } });
   }
 
-  // // remove(id: number) {
-  // //   return `This action removes a #${id} complaint`;
-  // // }
-
-  async checkComplaint(id: ObjectId): Promise<Complaint | object> {
+  async checkComplaint(id: ObjectId): Promise<Complaint> {
     const complaint: Complaint = await this.complaintModel.findById(id);
 
-    if (!complaint) return { message: 'Complaint not found' };
+    if (!complaint) throw new NotFoundException('Complaint not found');
 
     return complaint;
   }
