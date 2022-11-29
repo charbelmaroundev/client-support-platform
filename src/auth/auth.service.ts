@@ -24,6 +24,7 @@ export class AuthService {
     @InjectModel('User') private readonly userModel: Model<User>
   ) {}
 
+  //* Sign up
   async signup(body: SignUpDto): Promise<UserDto> {
     const {
       firstName,
@@ -41,6 +42,7 @@ export class AuthService {
       isVIP: boolean;
     } = body;
 
+    // check email
     const checkEmail: User | null = await this.userService.checkUserByEmail(
       email
     );
@@ -48,8 +50,10 @@ export class AuthService {
     if (checkEmail)
       throw new ConflictException('User with such email already exist');
 
+    // hash password
     const hashedPassword: string = await hashData(password);
 
+    // create user
     const user: User = await this.userModel.create({
       firstName,
       lastName,
@@ -62,14 +66,18 @@ export class AuthService {
     return user;
   }
 
+  //* Sign in
   async signin(body: SignInDto): Promise<AccessToken> {
     const { email, password }: { email: string; password: string } = body;
+
+    // Check email in database
     const checkEmail: User | null = await this.userService.checkUserByEmail(
       email
     );
 
     if (!checkEmail) this.CredentialIncorrect();
 
+    // Check password in database
     const isMatch: boolean = await bcrypt.compare(
       password,
       checkEmail.password
@@ -77,6 +85,7 @@ export class AuthService {
 
     if (!isMatch) this.CredentialIncorrect();
 
+    // payload for sign jwt
     const payload: Payload = { id: checkEmail.id };
 
     return {
@@ -84,12 +93,15 @@ export class AuthService {
     };
   }
 
+  //* Who am i
+  // for testing
   async whoami(id: string): Promise<User> {
     const user: User = await this.userService.checkUserById(id);
 
     return user;
   }
 
+  //* throw credentials incorrect error
   CredentialIncorrect() {
     throw new ForbiddenException('Incorrect credentials!');
   }

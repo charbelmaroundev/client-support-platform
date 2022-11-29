@@ -22,3 +22,10 @@ export class AdminGuard implements CanActivate {
     throw new HttpException('UNAUTHORIZED ACCESS', HttpStatus.FORBIDDEN);
   }
 }
+
+// I can create one role gaurd,
+// with enum (Admin, Client)
+// but you want the name to be isAdmin
+// this is why i used boolean
+
+// It is not logic to be isAdmin: Admin or isAdmin: Client

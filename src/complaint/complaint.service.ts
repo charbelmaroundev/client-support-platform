@@ -13,6 +13,7 @@ export class ComplaintService {
     @InjectModel('Complaint') private readonly complaintModel: Model<Complaint>
   ) {}
 
+  //* Create a complaint
   async create(
     createComplaintDto: CreateComplaintDto,
     id: ObjectId
@@ -28,6 +29,7 @@ export class ComplaintService {
     return complaint;
   }
 
+  //* Get all complaint for current user with simple pagination
   async findAllByUserId(
     id: ObjectId,
     page: number,
@@ -47,15 +49,15 @@ export class ComplaintService {
     return { total: complaints.length, complaints };
   }
 
+  // Get all complaints for admin user type with filtring by status and sorting by creation date
   async findAll(query: StatusAndSortDto): Promise<Object> {
-    console.log(query);
-
-    const { status, sort }: { status: Status; sort: Sort } = query;
+    const { status, sort }: StatusAndSortDto = query;
 
     let sortBy: number | undefined;
     if (!sort) sortBy = 1;
     if (sort) sortBy = sort.toString() === 'asc' ? 1 : -1;
 
+    // Stages
     const stages: any[] = [
       {
         $lookup: {
@@ -64,6 +66,7 @@ export class ComplaintService {
           foreignField: '_id',
           as: 'user',
           pipeline: [
+            // I can remove project here because im using serializer
             {
               $project: {
                 _id: 0,
@@ -105,6 +108,7 @@ export class ComplaintService {
         },
       },
 
+      // I can remove project because im using serializer
       {
         $project: {
           'data.user.isVIP': 0,
@@ -112,6 +116,7 @@ export class ComplaintService {
       },
     ];
 
+    // add filter stage (match)
     if (status) {
       stages.unshift({ $match: { status } });
     }
@@ -130,6 +135,7 @@ export class ComplaintService {
     return complaints;
   }
 
+  //* Update status by id
   async update(id: ObjectId, updateComplaintDto: StatusDto): Promise<void> {
     const { status }: { status: Status } = updateComplaintDto;
     await this.checkComplaint(id);
@@ -137,6 +143,7 @@ export class ComplaintService {
     await this.complaintModel.updateOne({ _id: id }, { $set: { status } });
   }
 
+  //* Check complaint
   async checkComplaint(id: ObjectId): Promise<Complaint> {
     const complaint: Complaint = await this.complaintModel.findById(id);
 

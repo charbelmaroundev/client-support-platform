@@ -67,14 +67,4 @@ export class ComplaintController {
   ): Promise<void> {
     return this.complaintService.update(param.id, updateComplaintDto);
   }
-
-  // // @Get(':id')
-  // // findOne(@Param('id') id: string) {
-  // //   return this.complaintService.findOne(+id);
-  // // }
-
-  // // @Delete(':id')
-  // // remove(@Param('id') id: string) {
-  // //   return this.complaintService.remove(+id);
-  // // }
 }
