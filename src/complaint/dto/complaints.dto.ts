@@ -7,5 +7,5 @@ export class ComplaintsDto {
 
   @Expose()
   @Type(() => ComplaintDto)
-  readonly complaints: [ComplaintDto];
+  readonly complaints: ComplaintDto[];
 }

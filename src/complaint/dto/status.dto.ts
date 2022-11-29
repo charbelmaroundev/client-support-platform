@@ -1,5 +1,5 @@
-import { IsEnum, IsOptional } from 'class-validator';
-import { Sort, Status } from '../schemas/complaint.schema';
+import { IsEnum, isNumberString, IsOptional } from 'class-validator';
+import { Sort, Status } from '../../types/index.type';
 
 export class StatusDto {
   @IsEnum(Status, {
