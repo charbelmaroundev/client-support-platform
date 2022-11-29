@@ -1,31 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, SchemaTypes } from 'mongoose';
 import { User } from 'src/user/schemas/user.schema';
-
-export enum Status {
-  PENDING = 'PENDING',
-  INPROGRESS = 'INPROGRESS',
-  RESOLVED = 'RESOLVED',
-  REJECTED = 'REJECTED',
-}
-
-export enum Sort {
-  ASC = 'ASC',
-  DESC = 'DESC',
-}
+import { Status } from 'src/types/index.type';
 
 @Schema({ timestamps: true })
 export class Complaint extends Document {
-  @Prop({ required: true, minlength: 3 })
+  @Prop({ required: true, minlength: 3, lowercase: true })
   readonly title: string;
 
-  @Prop({ required: true, minlength: 3 })
+  @Prop({ required: true, minlength: 3, lowercase: true })
   readonly body: string;
 
   @Prop({ default: Status.PENDING })
   readonly status: Status;
 
-  @Prop({ required: true, type: SchemaTypes.ObjectId, ref: 'user' })
+  @Prop({ required: true, type: SchemaTypes.ObjectId, ref: 'User' })
   readonly creator: User;
 }
 

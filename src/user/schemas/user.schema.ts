@@ -3,10 +3,10 @@ import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class User extends Document {
-  @Prop({ trim: true, required: true })
+  @Prop({ trim: true, required: true, lowercase: true })
   readonly firstName: string;
 
-  @Prop({ trim: true, required: true })
+  @Prop({ trim: true, required: true, lowercase: true })
   readonly lastName: string;
 
   @Prop({ trim: true, unique: true, lowercase: true, required: true })
