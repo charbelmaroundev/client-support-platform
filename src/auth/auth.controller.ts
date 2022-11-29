@@ -1,14 +1,14 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignInDto } from './dto/signin.dto';
 import { SignUpDto } from './dto/signup.dto';
-import { Public } from './decorators/public.decorator';
-import { CurrentUser } from './decorators/current-user.decorator';
+import { Public } from '../decorators/public.decorator';
+import { CurrentUser } from '../decorators/current-user.decorator';
 import { User } from 'src/user/schemas/user.schema';
 import { Serialize } from '../interceptor/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 import { WhoAmIDto } from './dto/who-am-i.dto';
-import { TokenDto } from './dto/token.dto';
+import { AccessToken } from '../types/index.type';
 
 @Controller('auth')
 export class AuthController {
@@ -23,9 +23,8 @@ export class AuthController {
 
   @Public()
   @Post('signin')
-  @Serialize(TokenDto)
-  @HttpCode(200)
-  signin(@Body() body: SignInDto): Promise<TokenDto> {
+  // @HttpCode(200)
+  signin(@Body() body: SignInDto): Promise<AccessToken> {
     return this.authService.signin(body);
   }
 
