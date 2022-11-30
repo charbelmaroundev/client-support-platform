@@ -1,4 +1,3 @@
-import { Type } from 'class-transformer';
 import { IsEnum, IsOptional } from 'class-validator';
 import { Sort, Status } from '../../types/index.type';
 
@@ -11,8 +10,10 @@ export class StatusDto {
 
 export class StatusAndSortDto {
   @IsOptional()
-  @Type(() => StatusDto)
-  readonly status: StatusDto;
+  @IsEnum(Status, {
+    message: `Status should be ${Status.INPROGRESS}, ${Status.PENDING}, ${Status.REJECTED}, ${Status.RESOLVED}!`,
+  })
+  readonly status: Status;
 
   @IsOptional()
   @IsEnum(Sort, {
