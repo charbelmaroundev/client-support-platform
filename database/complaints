@@ -1,0 +1,69 @@
+[{
+  "_id": {
+    "$oid": "6386fb4ddf59c60fa78daf72"
+  },
+  "title": "vip",
+  "body": "vip",
+  "status": "rejected",
+  "creator": {
+    "$oid": "6386f707df59c60fa78daf3d"
+  },
+  "createdAt": {
+    "$date": "2022-11-30T06:42:21.728Z"
+  },
+  "updatedAt": {
+    "$date": "2022-11-30T06:53:36.070Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6386fb83df59c60fa78daf7c"
+  },
+  "title": "vip2",
+  "body": "vip2",
+  "status": "pending",
+  "creator": {
+    "$oid": "6386f707df59c60fa78daf3d"
+  },
+  "createdAt": {
+    "$date": "2022-11-30T06:43:15.766Z"
+  },
+  "updatedAt": {
+    "$date": "2022-11-30T06:43:15.766Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6386fd9136f3de03b45ee693"
+  },
+  "title": "nonvip",
+  "body": "nonvip",
+  "status": "rejected",
+  "creator": {
+    "$oid": "6386f72ddf59c60fa78daf42"
+  },
+  "createdAt": {
+    "$date": "2022-11-30T06:52:01.639Z"
+  },
+  "updatedAt": {
+    "$date": "2022-11-30T06:54:37.527Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "6386fda0fd08c31fd8e4db98"
+  },
+  "title": "nonvip2",
+  "body": "nonvip2",
+  "status": "pending",
+  "creator": {
+    "$oid": "6386f72ddf59c60fa78daf42"
+  },
+  "createdAt": {
+    "$date": "2022-11-30T06:52:16.357Z"
+  },
+  "updatedAt": {
+    "$date": "2022-11-30T06:52:16.357Z"
+  },
+  "__v": 0
+}]
