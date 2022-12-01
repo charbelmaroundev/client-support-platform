@@ -3,8 +3,6 @@ import {
   Controller,
   Get,
   HttpCode,
-  ParseArrayPipe,
-  ParseBoolPipe,
   Post,
   UseGuards,
 } from '@nestjs/common';
