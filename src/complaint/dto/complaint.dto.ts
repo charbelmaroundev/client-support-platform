@@ -1,16 +1,15 @@
 import { Expose, Transform } from 'class-transformer';
 import { Status } from 'src/types/index.type';
+import { capitalize } from '../../utils/capitalize.util';
 
 @Expose()
 export class ComplaintDto {
   @Expose()
-  @Transform(
-    (title) => title.value.charAt(0).toUpperCase() + title.value.slice(1)
-  )
+  @Transform((title) => capitalize(title.value))
   readonly title: string;
 
   @Expose()
-  @Transform((body) => body.value.charAt(0).toUpperCase() + body.value.slice(1))
+  @Transform((body) => capitalize(body.value))
   readonly body: string;
 
   @Expose()

@@ -1,6 +1,7 @@
 import { Expose, Transform, Type } from 'class-transformer';
 import { Status } from '../../types/index.type';
 import { UserDto } from '../../auth/dto/user.dto';
+import { capitalize } from 'src/utils/capitalize.util';
 
 class AdminComplaintsDto {
   @Expose()
@@ -15,13 +16,11 @@ class AdminComplaintsDto {
 @Expose()
 class ComplaintWithUserDto {
   @Expose()
-  @Transform(
-    (title) => title.value.charAt(0).toUpperCase() + title.value.slice(1)
-  )
+  @Transform((title) => capitalize(title.value))
   readonly title: string;
 
   @Expose()
-  @Transform((body) => body.value.charAt(0).toUpperCase() + body.value.slice(1))
+  @Transform((body) => capitalize(body.value))
   readonly body: string;
 
   @Expose()

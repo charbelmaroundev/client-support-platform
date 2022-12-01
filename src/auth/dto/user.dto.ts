@@ -1,21 +1,16 @@
 import { Expose, Transform } from 'class-transformer';
+import { capitalize } from '../../utils/capitalize.util';
 
 export class UserDto {
   @Expose()
 
   //* capitalize first name
-  @Transform(
-    (firstName) =>
-      firstName.value.charAt(0).toUpperCase() + firstName.value.slice(1)
-  )
+  @Transform((firstName) => capitalize(firstName.value))
   readonly firstName: string;
 
   //* capitalize last name
   @Expose()
-  @Transform(
-    (lastName) =>
-      lastName.value.charAt(0).toUpperCase() + lastName.value.slice(1)
-  )
+  @Transform((lastName) => capitalize(lastName.value))
   readonly lastName: string;
 
   //* transform email to lower case

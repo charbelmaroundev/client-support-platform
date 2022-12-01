@@ -3,7 +3,7 @@ import { Sort, Status } from '../../types/index.type';
 
 class StatusDto {
   @IsEnum(Status, {
-    message: `Status should be ${Status.INPROGRESS}, ${Status.PENDING}, ${Status.REJECTED}, ${Status.RESOLVED}!`,
+    message: `Status should be ${Status.PENDING}, ${Status.INPROGRESS}, ${Status.RESOLVED}, ${Status.REJECTED}!`,
   })
   readonly status: Status;
 }
@@ -11,7 +11,7 @@ class StatusDto {
 class StatusAndSortDto {
   @IsOptional()
   @IsEnum(Status, {
-    message: `Status should be ${Status.INPROGRESS}, ${Status.PENDING}, ${Status.REJECTED}, ${Status.RESOLVED}!`,
+    message: `Status should be ${Status.PENDING}, ${Status.INPROGRESS}, ${Status.RESOLVED}, ${Status.REJECTED}!`,
   })
   readonly status: Status;
 

@@ -1,22 +1,17 @@
 import { Expose, Transform } from 'class-transformer';
 import { ObjectId } from 'mongoose';
+import { capitalize } from '../../utils/capitalize.util';
 
 export class WhoAmIDto {
   @Expose()
   readonly id: ObjectId;
 
   @Expose()
-  @Transform(
-    (firstName) =>
-      firstName.value.charAt(0).toUpperCase() + firstName.value.slice(1)
-  )
+  @Transform((firstName) => capitalize(firstName.value))
   readonly firstName: string;
 
   @Expose()
-  @Transform(
-    (lastName) =>
-      lastName.value.charAt(0).toUpperCase() + lastName.value.slice(1)
-  )
+  @Transform((lastName) => capitalize(lastName.value))
   readonly lastName: string;
 
   @Expose()
