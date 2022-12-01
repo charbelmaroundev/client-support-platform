@@ -1,26 +1,30 @@
 import {
   ConflictException,
   ForbiddenException,
+  HttpException,
+  HttpStatus,
   Injectable,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { User } from 'src/user/schemas/user.schema';
 import { SignUpDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
-import { SignInDto } from './dto/signin.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserDto } from './dto/user.dto';
 import { hashData } from '../utils/hash-data..util';
 import { UserService } from '../user/user.service';
 import { Payload } from 'src/types/index.type';
 import { AccessToken } from 'src/types/index.type';
+import { MailService } from 'src/mail/mail.service';
+import { Options } from '../types/index.type';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly mailService: MailService,
     @InjectModel('User') private readonly userModel: Model<User>
   ) {}
 
@@ -48,7 +52,9 @@ export class AuthService {
     );
 
     if (checkEmail)
-      throw new ConflictException('User with such email already exist');
+      throw new ConflictException(
+        `User with this email ${email.toLowerCase()} is already exist`
+      );
 
     // hash password
     const hashedPassword: string = await hashData(password);
@@ -63,30 +69,47 @@ export class AuthService {
       isVIP,
     });
 
+    if (isAdmin === false) {
+      const options: Options = {
+        subject: `It's great to have you at Client Support Platform`,
+        text: `Thank you for purchasing client-support-platform`,
+      };
+
+      // its is better to not use await here
+      this.mailService.sendEmail(user, options);
+    }
+
     return user;
   }
 
-  //* Sign in
-  async signin(body: SignInDto): Promise<AccessToken> {
-    const { email, password }: { email: string; password: string } = body;
-
-    // Check email in database
+  //* Validate user
+  async validateUser(email: string, password: string): Promise<User> {
     const checkEmail: User | null = await this.userService.checkUserByEmail(
       email
     );
 
-    if (!checkEmail) this.CredentialIncorrect();
+    if (!checkEmail) {
+      this.CredentialIncorrect();
+    }
 
-    // Check password in database
     const isMatch: boolean = await bcrypt.compare(
       password,
       checkEmail.password
     );
 
-    if (!isMatch) this.CredentialIncorrect();
+    if (!isMatch) {
+      this.CredentialIncorrect();
+    }
+    return checkEmail;
+  }
 
-    // payload for sign jwt
-    const payload: Payload = { id: checkEmail.id };
+  //* Sign in
+  async signin(user: ObjectId): Promise<AccessToken> {
+    const checkUser: User = await this.userService.checkUserById(
+      user.toString()
+    );
+
+    const payload: Payload = { id: checkUser.id };
 
     return {
       access_token: this.jwtService.sign(payload),
@@ -106,3 +129,30 @@ export class AuthService {
     throw new ForbiddenException('Incorrect credentials!');
   }
 }
+
+// // //* Sign in
+// // async signin(body: SignInDto): Promise<AccessToken> {
+// //   const { email, password }: { email: string; password: string } = body;
+
+// //   // Check email in database
+// //   const checkEmail: User | null = await this.userService.checkUserByEmail(
+// //     email
+// //   );
+
+// //   if (!checkEmail) this.CredentialIncorrect();
+
+// //   // Check password in database
+// //   const isMatch: boolean = await bcrypt.compare(
+// //     password,
+// //     checkEmail.password
+// //   );
+
+// //   if (!isMatch) this.CredentialIncorrect();
+
+// //   // payload for sign jwt
+// //   const payload: Payload = { id: checkEmail.id };
+
+// //   return {
+// //     access_token: this.jwtService.sign(payload),
+// //   };
+// // }
