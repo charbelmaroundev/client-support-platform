@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserModule } from './user/user.module';
 import { ComplaintModule } from './complaint/complaint.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ComplaintModule } from './complaint/complaint.module';
     AuthModule,
     UserModule,
     ComplaintModule,
+    MailModule,
   ],
   providers: [
     {

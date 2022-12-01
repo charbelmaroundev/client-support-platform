@@ -17,7 +17,7 @@ export class AdminGuard implements CanActivate {
 
     user = await this.userService.checkUserById(user.id);
 
-    if (user.isAdmin === true) return true;
+    if (user.isAdmin) return true;
 
     throw new HttpException('UNAUTHORIZED ACCESS', HttpStatus.FORBIDDEN);
   }

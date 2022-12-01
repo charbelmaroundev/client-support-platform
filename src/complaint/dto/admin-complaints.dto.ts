@@ -2,7 +2,7 @@ import { Expose, Transform, Type } from 'class-transformer';
 import { Status } from '../../types/index.type';
 import { UserDto } from '../../auth/dto/user.dto';
 
-export class AdminComplaintsDto {
+class AdminComplaintsDto {
   @Expose()
   @Type(() => ComplaintWithUserDto)
   vip: ComplaintWithUserDto[];
@@ -13,7 +13,7 @@ export class AdminComplaintsDto {
 }
 
 @Expose()
-export class ComplaintWithUserDto {
+class ComplaintWithUserDto {
   @Expose()
   @Transform(
     (title) => title.value.charAt(0).toUpperCase() + title.value.slice(1)
@@ -35,3 +35,5 @@ export class ComplaintWithUserDto {
   @Type(() => UserDto)
   readonly user: UserDto;
 }
+
+export { AdminComplaintsDto, ComplaintWithUserDto };

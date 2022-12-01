@@ -24,8 +24,8 @@ export class WhoAmIDto {
   readonly email: string;
 
   @Expose()
-  readonly isVIP: boolean;
+  readonly isAdmin: boolean;
 
   @Expose()
-  readonly isAdmin: boolean;
+  readonly isVIP: boolean;
 }

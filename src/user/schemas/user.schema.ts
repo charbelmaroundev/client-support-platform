@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema({ timestamps: true })
-export class User extends Document {
+class User extends Document {
   @Prop({ trim: true, required: true, lowercase: true })
   readonly firstName: string;
 
@@ -27,6 +27,8 @@ export class User extends Document {
   readonly isVIP: boolean;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.index({ email: 1 });
+
+export { User, UserSchema };

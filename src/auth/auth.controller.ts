@@ -1,6 +1,14 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  ParseArrayPipe,
+  ParseBoolPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignInDto } from './dto/signin.dto';
 import { SignUpDto } from './dto/signup.dto';
 import { Public } from '../decorators/public.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
@@ -9,6 +17,8 @@ import { Serialize } from '../interceptor/serialize.interceptor';
 import { UserDto } from './dto/user.dto';
 import { WhoAmIDto } from './dto/who-am-i.dto';
 import { AccessToken } from '../types/index.type';
+import { LocalAuthGuard } from '../guards/local-auth.guard';
+import { ObjectId } from 'mongoose';
 
 @Controller('auth')
 export class AuthController {
@@ -22,10 +32,11 @@ export class AuthController {
   }
 
   @Public()
-  @Post('signin')
   @HttpCode(200)
-  signin(@Body() body: SignInDto): Promise<AccessToken> {
-    return this.authService.signin(body);
+  @Post('signin')
+  @UseGuards(LocalAuthGuard)
+  signin(@CurrentUser() user: ObjectId): Promise<AccessToken> {
+    return this.authService.signin(user);
   }
 
   @Get('me')

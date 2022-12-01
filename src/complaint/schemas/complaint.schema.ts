@@ -4,7 +4,7 @@ import { User } from 'src/user/schemas/user.schema';
 import { Status } from 'src/types/index.type';
 
 @Schema({ timestamps: true })
-export class Complaint extends Document {
+class Complaint extends Document {
   @Prop({ required: true, minlength: 3, lowercase: true })
   readonly title: string;
 
@@ -18,6 +18,8 @@ export class Complaint extends Document {
   readonly creator: User;
 }
 
-export const ComplaintSchema = SchemaFactory.createForClass(Complaint);
+const ComplaintSchema = SchemaFactory.createForClass(Complaint);
 
 ComplaintSchema.index({ status: 1 });
+
+export { Complaint, ComplaintSchema };
