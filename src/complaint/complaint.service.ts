@@ -3,13 +3,19 @@ import { CreateComplaintDto } from './dto/create-complaint.dto';
 import { Model, ObjectId } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Complaint } from './schemas/complaint.schema';
-import { Status, Sort } from 'src/types/index.type';
+import { Status } from 'src/types/index.type';
 import { StatusDto, StatusAndSortDto } from './dto/status.dto';
 import { ComplaintsDto } from './dto/complaints.dto';
+import { MailService } from 'src/mail/mail.service';
+import { Options } from '../types/index.type';
+import { UserService } from '../user/user.service';
+import { capitalize } from 'src/utils/capitalize.util';
 
 @Injectable()
 export class ComplaintService {
   constructor(
+    private readonly mailService: MailService,
+    private readonly userService: UserService,
     @InjectModel('Complaint') private readonly complaintModel: Model<Complaint>
   ) {}
 
@@ -25,6 +31,18 @@ export class ComplaintService {
       body,
       creator: id,
     });
+
+    const user = await this.userService.checkUserById(id.toString());
+
+    const options: Options = {
+      subject: `Complaint Received`,
+      text: `Thank you for letting us know about ${capitalize(
+        title
+      )}, well noted`,
+    };
+
+    // its is better to not use await here
+    this.mailService.sendEmail(user, options);
 
     return complaint;
   }
@@ -49,7 +67,7 @@ export class ComplaintService {
     return { total: complaints.length, complaints };
   }
 
-  // Get all complaints for admin user type with filtring by status and sorting by creation date
+  //* Get all complaints for admin user type with filtring by status and sorting by creation date
   async findAll(query: StatusAndSortDto): Promise<Object> {
     const { status, sort }: StatusAndSortDto = query;
 
@@ -60,13 +78,17 @@ export class ComplaintService {
     // Stages
     const stages: any[] = [
       {
+        $match: {
+          ...(status ? { status } : {}),
+        },
+      },
+      {
         $lookup: {
           from: 'users',
           localField: 'creator',
           foreignField: '_id',
           as: 'user',
           pipeline: [
-            // I can remove project here because im using serializer
             {
               $project: {
                 _id: 0,
@@ -83,56 +105,53 @@ export class ComplaintService {
       { $unwind: '$user' },
 
       {
-        $sort: {
-          createdAt: sortBy,
-        },
-      },
-
-      {
-        $group: {
-          _id: '$user.isVIP',
-          data: {
-            $push: {
-              title: '$title',
-              body: '$body',
-              createdDate: {
-                $dateToString: {
-                  format: '%Y-%m-%dT%H:%M:%S',
-                  date: '$createdAt',
-                },
-              },
-              status: '$status',
-              user: '$user',
+        $project: {
+          _id: 0,
+          title: 1,
+          body: 1,
+          createdDate: {
+            $dateToString: {
+              format: '%Y-%m-%dT%H:%M:%S',
+              date: '$createdAt',
             },
           },
+          status: 1,
+          'user.firstName': 1,
+          'user.lastName': 1,
+          'user.email': 1,
+          'user.isVIP': 1,
         },
       },
 
-      // I can remove project because im using serializer
       {
-        $project: {
-          'data.user.isVIP': 0,
+        $sort: {
+          createdDate: sortBy,
+        },
+      },
+
+      {
+        $facet: {
+          vip: [
+            {
+              $match: {
+                'user.isVIP': true,
+              },
+            },
+          ],
+          nonVip: [
+            {
+              $match: {
+                'user.isVIP': false,
+              },
+            },
+          ],
         },
       },
     ];
 
-    // add filter stage (match)
-    if (status) {
-      stages.unshift({ $match: { status } });
-    }
-
     const complaint = await this.complaintModel.aggregate(stages);
 
-    if (!complaint.length) throw new NotFoundException('Complaint not found');
-
-    let complaints: Object;
-    if (complaint[0]._id === true) {
-      complaints = { vip: complaint[0]?.data, nonVip: complaint[1]?.data };
-    } else {
-      complaints = { vip: complaint[1]?.data, nonVip: complaint[0]?.data };
-    }
-
-    return complaints;
+    return complaint[0];
   }
 
   //* Update status by id
@@ -141,13 +160,28 @@ export class ComplaintService {
     await this.checkComplaint(id);
 
     await this.complaintModel.updateOne({ _id: id }, { $set: { status } });
+
+    const complaint = await this.checkComplaint(id);
+
+    const user = await this.userService.checkUserById(
+      complaint.creator.toString()
+    );
+
+    const options: Options = {
+      subject: `Complaint Status`,
+      text: `Your complaint about ${capitalize(complaint.title)} is ${status}`,
+    };
+
+    // its is better to not use await here
+    this.mailService.sendEmail(user, options);
   }
 
   //* Check complaint
   async checkComplaint(id: ObjectId): Promise<Complaint> {
     const complaint: Complaint = await this.complaintModel.findById(id);
 
-    if (!complaint) throw new NotFoundException('Complaint not found');
+    if (!complaint)
+      throw new NotFoundException(`Complaint with this id ${id} not found`);
 
     return complaint;
   }
