@@ -29,7 +29,7 @@ export class AuthService {
   ) {}
 
   //* Sign up
-  async signup(body: SignUpDto): Promise<UserDto> {
+  async signup(body: SignUpDto): Promise<User> {
     const {
       firstName,
       lastName,
@@ -129,30 +129,3 @@ export class AuthService {
     throw new ForbiddenException('Incorrect credentials!');
   }
 }
-
-// // //* Sign in
-// // async signin(body: SignInDto): Promise<AccessToken> {
-// //   const { email, password }: { email: string; password: string } = body;
-
-// //   // Check email in database
-// //   const checkEmail: User | null = await this.userService.checkUserByEmail(
-// //     email
-// //   );
-
-// //   if (!checkEmail) this.CredentialIncorrect();
-
-// //   // Check password in database
-// //   const isMatch: boolean = await bcrypt.compare(
-// //     password,
-// //     checkEmail.password
-// //   );
-
-// //   if (!isMatch) this.CredentialIncorrect();
-
-// //   // payload for sign jwt
-// //   const payload: Payload = { id: checkEmail.id };
-
-// //   return {
-// //     access_token: this.jwtService.sign(payload),
-// //   };
-// // }

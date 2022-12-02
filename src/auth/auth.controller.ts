@@ -25,7 +25,7 @@ export class AuthController {
   @Public()
   @Post('signup')
   @Serialize(UserDto)
-  signup(@Body() body: SignUpDto): Promise<UserDto> {
+  signup(@Body() body: SignUpDto): Promise<User> {
     return this.authService.signup(body);
   }
 

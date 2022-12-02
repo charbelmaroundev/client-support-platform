@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
@@ -28,7 +28,6 @@ const databaseName = process.env.DATABASE_NAME || 'client-support-platform';
           },
         },
       }),
-      inject: [ConfigService],
     }),
 
     MongooseModule.forRoot(`mongodb://localhost:27017/${databaseName}`),
