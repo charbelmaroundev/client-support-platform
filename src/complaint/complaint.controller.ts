@@ -9,7 +9,6 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  ParseArrayPipe,
 } from '@nestjs/common';
 import { CurrentUser } from 'src/decorators/current-user.decorator';
 import { ComplaintService } from './complaint.service';
@@ -20,17 +19,18 @@ import { Serialize } from 'src/interceptor/serialize.interceptor';
 import { ComplaintsDto } from './dto/complaints.dto';
 import { ObjectIdDto } from './dto/objectId.dto';
 import { StatusDto, StatusAndSortDto } from './dto/status.dto';
-import { ClientGuard } from '../guards/client-role.guards';
-import { AdminGuard } from '../guards/admin-role-guard';
 import { AdminComplaintsDto } from './dto/admin-complaints.dto';
+import { Roles } from 'src/decorators/roles.decorator';
+import { RolesGuard } from '../guards/roles.guard';
 
 @Controller('complaint')
 export class ComplaintController {
   constructor(private readonly complaintService: ComplaintService) {}
 
   @Post()
+  @Roles(false)
+  @UseGuards(RolesGuard)
   @Serialize(ComplaintDto)
-  @UseGuards(ClientGuard)
   create(
     @Body() createComplaintDto: CreateComplaintDto,
     @CurrentUser() user: User
@@ -39,8 +39,9 @@ export class ComplaintController {
   }
 
   @Get()
+  @Roles(false)
+  @UseGuards(RolesGuard)
   @Serialize(ComplaintsDto)
-  @UseGuards(ClientGuard)
   findAllByUserId(
     @Query() pagination,
     @CurrentUser() user: User
@@ -53,14 +54,17 @@ export class ComplaintController {
   }
 
   @Get('admin')
+  @Roles(true)
+  @UseGuards(RolesGuard)
   @Serialize(AdminComplaintsDto)
-  @UseGuards(AdminGuard)
+  // @UseGuards(AdminGuard)
   findAll(@Query() query: StatusAndSortDto): Promise<Object> {
     return this.complaintService.findAll(query);
   }
 
   @Patch(':id')
-  @UseGuards(AdminGuard)
+  @Roles(true)
+  @UseGuards(RolesGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   update(
     @Param() param: ObjectIdDto,
