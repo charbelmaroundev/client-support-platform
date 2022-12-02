@@ -30,5 +30,6 @@ class User extends Document {
 const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.index({ email: 1 });
+UserSchema.index({ firstName: 'text', lastName: 'text' });
 
 export { User, UserSchema };

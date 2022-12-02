@@ -10,6 +10,7 @@ import { MailService } from 'src/mail/mail.service';
 import { capitalize } from 'src/utils/capitalize.util';
 import { Options, UpDowngrade, VipNonVip } from '../types/index.type';
 import { NotFoundException } from '@nestjs/common';
+import { SearchDto } from './dto/search.dto.';
 
 @Injectable()
 export class UserService {
@@ -81,5 +82,21 @@ export class UserService {
 
     // its is better to not use await here
     this.mailService.sendEmail(client, options);
+  }
+
+  async searchByName(name: any) {
+    const users = await this.userModel.find({
+      $text: {
+        $search: `/${name}/i`,
+        $caseSensitive: false,
+        $diacriticSensitive: false,
+      },
+    });
+
+    if (!users.length) {
+      throw new NotFoundException(`User with this name ${name} not found!`);
+    }
+
+    return { total: users.length, users };
   }
 }

@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   HttpCode,
   Param,
   Patch,
@@ -9,9 +10,12 @@ import {
 import { CurrentUser } from 'src/decorators/current-user.decorator';
 import { UserService } from './user.service';
 import { User } from './schemas/user.schema';
-import { AdminGuard } from '../guards/admin-role-guard';
 import { MethodDto } from './dto/update-user.dto';
 import { ObjectIdDto } from '../complaint/dto/objectId.dto';
+import { Serialize } from 'src/interceptor/serialize.interceptor';
+import { SearchDto } from './dto/search.dto.';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('user')
 export class UserController {
@@ -19,12 +23,25 @@ export class UserController {
 
   @Patch(':id')
   @HttpCode(204)
-  @UseGuards(AdminGuard)
+  @Roles(true)
+  @UseGuards(RolesGuard)
   downgradeUser(
     @CurrentUser() adminId: User,
     @Param() id: ObjectIdDto,
     @Query() method: MethodDto
-  ) {
-    return this.userService.updateVip(adminId.id, id.id, method.method);
+  ): void {
+    this.userService.updateVip(adminId.id, id.id, method.method);
+  }
+
+  // @Get()
+  // @UseGuards(AdminGuard)
+  // getAll() {}
+
+  @Get(':name')
+  @Serialize(SearchDto)
+  @Roles(true)
+  @UseGuards(RolesGuard)
+  searchByName(@Param('name') name: any) {
+    return this.userService.searchByName(name);
   }
 }
