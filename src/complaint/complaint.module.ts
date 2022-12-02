@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ComplaintSchema } from './schemas/complaint.schema';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
+import { MailService } from '../utils/send-mail.util';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { UserModule } from '../user/user.module';
     UserModule,
   ],
   controllers: [ComplaintController],
-  providers: [ComplaintService],
+  providers: [ComplaintService, MailService],
 })
 export class ComplaintModule {}

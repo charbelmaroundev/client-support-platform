@@ -9,6 +9,7 @@ import { JwtStrategy } from 'src/strategies/jwt.strategy';
 import { UserModule } from '../user/user.module';
 import { ConfigService } from '@nestjs/config';
 import { LocalStrategy } from '../strategies/local.strategy';
+import { MailService } from '../utils/send-mail.util';
 
 const secret = process.env.SECRET_KEY_JWT || 'n2r5u8x/A?D(G+KbPeShVmYq3s6v9y$B';
 const expiresIn = process.env.EXPIRES_IN_JWT || '1h';
@@ -28,6 +29,6 @@ const expiresIn = process.env.EXPIRES_IN_JWT || '1h';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy],
+  providers: [AuthService, JwtStrategy, LocalStrategy, MailService],
 })
 export class AuthModule {}
