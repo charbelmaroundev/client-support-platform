@@ -19,9 +19,9 @@ import { Serialize } from 'src/interceptor/serialize.interceptor';
 import { ComplaintsDto } from './dto/complaints.dto';
 import { ObjectIdDto } from './dto/objectId.dto';
 import { StatusDto, StatusAndSortDto } from './dto/status.dto';
-import { AdminComplaintsDto } from './dto/admin-complaints.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from '../guards/roles.guard';
+import { AdminComplaintsDto } from './dto/admin-complaints.dto';
 
 @Controller('complaint')
 export class ComplaintController {
@@ -57,7 +57,6 @@ export class ComplaintController {
   @Roles(true)
   @UseGuards(RolesGuard)
   @Serialize(AdminComplaintsDto)
-  // @UseGuards(AdminGuard)
   findAll(@Query() query: StatusAndSortDto): Promise<Object> {
     return this.complaintService.findAll(query);
   }

@@ -6,7 +6,7 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import { Model } from 'mongoose';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from 'src/utils/send-mail.util';
 import { capitalize } from 'src/utils/capitalize.util';
 import { Options, UpDowngrade, VipNonVip } from '../types/index.type';
 import { NotFoundException } from '@nestjs/common';
@@ -93,9 +93,9 @@ export class UserService {
       },
     });
 
-    if (!users.length) {
-      throw new NotFoundException(`User with this name ${name} not found!`);
-    }
+    // if (!users.length) {
+    //   throw new NotFoundException(`User with this name ${name} not found!`);
+    // }
 
     return { total: users.length, users };
   }

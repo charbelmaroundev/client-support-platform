@@ -16,7 +16,7 @@ import { hashData } from '../utils/hash-data..util';
 import { UserService } from '../user/user.service';
 import { Payload } from 'src/types/index.type';
 import { AccessToken } from 'src/types/index.type';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from 'src/utils/send-mail.util';
 import { Options } from '../types/index.type';
 
 @Injectable()

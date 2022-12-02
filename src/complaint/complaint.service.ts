@@ -6,7 +6,7 @@ import { Complaint } from './schemas/complaint.schema';
 import { Status } from 'src/types/index.type';
 import { StatusDto, StatusAndSortDto } from './dto/status.dto';
 import { ComplaintsDto } from './dto/complaints.dto';
-import { MailService } from 'src/mail/mail.service';
+import { MailService } from 'src/utils/send-mail.util';
 import { Options } from '../types/index.type';
 import { UserService } from '../user/user.service';
 import { capitalize } from 'src/utils/capitalize.util';
@@ -62,7 +62,7 @@ export class ComplaintService {
       .limit(limit)
       .skip(offset);
 
-    if (!complaints.length) throw new NotFoundException('Complaint not found');
+    // if (!complaints.length) throw new NotFoundException('Complaint not found');
 
     return { total: complaints.length, complaints };
   }
@@ -145,6 +145,13 @@ export class ComplaintService {
               },
             },
           ],
+        },
+      },
+
+      {
+        $project: {
+          'vip.user.isVIP': 0,
+          'nonVip.user.isVIP': 0,
         },
       },
     ];
