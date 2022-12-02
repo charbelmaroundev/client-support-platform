@@ -7,6 +7,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { UserModule } from './user/user.module';
 import { ComplaintModule } from './complaint/complaint.module';
 import { MailModule } from './mail/mail.module';
+import { RolesGuard } from './guards/roles.guard';
 
 const databaseName = process.env.DATABASE_NAME || 'client-support-platform';
 
@@ -25,6 +26,10 @@ const databaseName = process.env.DATABASE_NAME || 'client-support-platform';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
   ],
 })
