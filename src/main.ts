@@ -2,7 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3030;
 
 (async () => {
   const app = await NestFactory.create(AppModule, { cors: true });

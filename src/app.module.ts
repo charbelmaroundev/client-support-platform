@@ -8,7 +8,6 @@ import { UserModule } from './user/user.module';
 import { ComplaintModule } from './complaint/complaint.module';
 import { MailModule } from './mail/mail.module';
 
-const databasePort = process.env.DATABASE_PORT || 27017;
 const databaseName = process.env.DATABASE_NAME || 'client-support-platform';
 
 @Module({
@@ -16,9 +15,7 @@ const databaseName = process.env.DATABASE_NAME || 'client-support-platform';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot(
-      `mongodb://localhost:${databasePort}/${databaseName}`
-    ),
+    MongooseModule.forRoot(`mongodb://localhost:27017/${databaseName}`),
     AuthModule,
     UserModule,
     ComplaintModule,
