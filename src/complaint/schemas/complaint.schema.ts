@@ -21,5 +21,6 @@ class Complaint extends Document {
 const ComplaintSchema = SchemaFactory.createForClass(Complaint);
 
 ComplaintSchema.index({ status: 1 });
+ComplaintSchema.index({ creator: 1 });
 
 export { Complaint, ComplaintSchema };
