@@ -130,26 +130,36 @@ export class ComplaintService {
       },
 
       {
-        $facet: {
-          vip: [
-            {
-              $match: {
-                'user.isVIP': true,
-              },
+        $group: {
+          _id: null,
+          vip: {
+            $push: {
+              $cond: [
+                {
+                  $eq: ['$user.isVIP', true],
+                },
+                '$$ROOT',
+                '$$REMOVE',
+              ],
             },
-          ],
-          nonVip: [
-            {
-              $match: {
-                'user.isVIP': false,
-              },
+          },
+          nonVip: {
+            $push: {
+              $cond: [
+                {
+                  $eq: ['$user.isVIP', false],
+                },
+                '$$ROOT',
+                '$$REMOVE',
+              ],
             },
-          ],
+          },
         },
       },
 
       {
         $project: {
+          _id: 0,
           'vip.user.isVIP': 0,
           'nonVip.user.isVIP': 0,
         },

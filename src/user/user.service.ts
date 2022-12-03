@@ -10,7 +10,6 @@ import { MailService } from 'src/utils/send-mail.util';
 import { capitalize } from 'src/utils/capitalize.util';
 import { Options, UpDowngrade, VipNonVip } from '../types/index.type';
 import { NotFoundException } from '@nestjs/common';
-import { SearchDto } from './dto/search.dto.';
 
 @Injectable()
 export class UserService {
@@ -92,10 +91,6 @@ export class UserService {
         $diacriticSensitive: false,
       },
     });
-
-    // if (!users.length) {
-    //   throw new NotFoundException(`User with this name ${name} not found!`);
-    // }
 
     return { total: users.length, users };
   }
