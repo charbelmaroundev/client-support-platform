@@ -1,8 +1,6 @@
 import {
   ConflictException,
   ForbiddenException,
-  HttpException,
-  HttpStatus,
   Injectable,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -11,7 +9,6 @@ import { User } from 'src/user/schemas/user.schema';
 import { SignUpDto } from './dto/signup.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserDto } from './dto/user.dto';
 import { hashData } from '../utils/hash-data..util';
 import { UserService } from '../user/user.service';
 import { Payload } from 'src/types/index.type';

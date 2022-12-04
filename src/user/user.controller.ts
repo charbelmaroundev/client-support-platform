@@ -29,13 +29,9 @@ export class UserController {
     @CurrentUser() adminId: User,
     @Param() id: ObjectIdDto,
     @Query() method: MethodDto
-  ): void {
+  ) {
     this.userService.updateVip(adminId.id, id.id, method.method);
   }
-
-  // @Get()
-  // @UseGuards(AdminGuard)
-  // getAll() {}
 
   @Get(':name')
   @Serialize(SearchDto)

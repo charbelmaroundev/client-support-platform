@@ -2,14 +2,14 @@ import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { MailService } from 'src/utils/send-mail.util';
 import { capitalize } from 'src/utils/capitalize.util';
 import { Options, UpDowngrade, VipNonVip } from '../types/index.type';
-import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -35,21 +35,19 @@ export class UserService {
   //* Up and Down grade client to vip and non vip
   async updateVip(
     adminId: User,
-    clientId: Object,
+    clientId: ObjectId,
     method: Object
   ): Promise<void> {
     const admin: User = await this.checkUserById(adminId.toString());
     const client: User = await this.userModel.findOne({ _id: clientId });
 
-    if (!client) {
-      throw new NotFoundException(`Client not found with this id ${clientId}!`);
-    }
+    if (!client)
+      throw new NotFoundException(`Client with this id ${clientId} not found!`);
 
-    if (client.isAdmin) {
+    if (client.isAdmin)
       throw new BadRequestException(
         `User with this id ${clientId} is an admin!`
       );
-    }
 
     let vip: boolean;
     let text: VipNonVip;
@@ -65,10 +63,11 @@ export class UserService {
       UpDown = UpDowngrade.DOWNGRADE;
     }
 
-    if (client.isVIP === vip)
+    if (client.isVIP === vip) {
       throw new BadRequestException(
         `Client with this id ${clientId} is ${text} you can't ${UpDown}!`
       );
+    }
 
     await this.userModel.updateOne({ _id: clientId }, { $set: { isVIP: vip } });
 

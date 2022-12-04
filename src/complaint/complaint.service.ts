@@ -62,8 +62,6 @@ export class ComplaintService {
       .limit(limit)
       .skip(offset);
 
-    // if (!complaints.length) throw new NotFoundException('Complaint not found');
-
     return { total: complaints.length, complaints };
   }
 

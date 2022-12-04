@@ -22,6 +22,7 @@ import { StatusDto, StatusAndSortDto } from './dto/status.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from '../guards/roles.guard';
 import { AdminComplaintsDto } from './dto/admin-complaints.dto';
+import { Complaint } from './schemas/complaint.schema';
 
 @Controller('complaint')
 export class ComplaintController {
@@ -34,7 +35,7 @@ export class ComplaintController {
   create(
     @Body() createComplaintDto: CreateComplaintDto,
     @CurrentUser() user: User
-  ): Promise<ComplaintDto> {
+  ): Promise<Complaint> {
     return this.complaintService.create(createComplaintDto, user.id);
   }
 
