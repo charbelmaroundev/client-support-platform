@@ -1,86 +1,69 @@
 [{
   "_id": {
-    "$oid": "6386f6c4df59c60fa78daf35"
+    "$oid": "638c98645a51bf90740f4527"
   },
   "firstName": "admin",
   "lastName": "admin",
   "email": "admin@gmail.com",
-  "password": "$2b$10$k5YY2MDIbwm3W6tEHxEwGupd1RusRA4LNCAOWZrnKSHHQ8fhbSYfa",
+  "password": "$2b$10$P4acCnOF9hQBdNh16g.RueahbhzeTkr2ykR/3eexz1TLCuXh1VlU6",
   "isAdmin": true,
   "isVIP": false,
   "createdAt": {
-    "$date": "2022-11-30T06:23:00.779Z"
+    "$date": "2022-12-04T12:53:56.955Z"
   },
   "updatedAt": {
-    "$date": "2022-11-30T06:23:00.779Z"
+    "$date": "2022-12-04T12:53:56.955Z"
   },
   "__v": 0
 },{
   "_id": {
-    "$oid": "6386f707df59c60fa78daf3d"
+    "$oid": "638c98755a51bf90740f452a"
   },
   "firstName": "vip",
   "lastName": "vip",
   "email": "vip@gmail.com",
-  "password": "$2b$10$u2gZHtvyhPWtv8trm0SOTeA99V.pMt/vuAoqcZ/0UR.JlpeAZ7a9O",
+  "password": "$2b$10$cQVTgwaP9bNtAMQ1VhwFCOQT8ElAHAM02VB9MC571kqpMGplAhz.C",
   "isAdmin": false,
   "isVIP": true,
   "createdAt": {
-    "$date": "2022-11-30T06:24:07.555Z"
+    "$date": "2022-12-04T12:54:13.323Z"
   },
   "updatedAt": {
-    "$date": "2022-11-30T06:24:07.555Z"
+    "$date": "2022-12-04T12:54:13.323Z"
   },
   "__v": 0
 },{
   "_id": {
-    "$oid": "6386f72ddf59c60fa78daf42"
+    "$oid": "638c98895a51bf90740f452d"
   },
   "firstName": "nonvip",
   "lastName": "nonvip",
   "email": "nonvip@gmail.com",
-  "password": "$2b$10$/fgozk/3SzpL9LwMaAPKDOqapg8V8KBsa7OxtFl6IfiIJDufQ5Dp2",
+  "password": "$2b$10$SR84TcF1k7ze.hlw/eo06eTyHCe1nJ1bEmdNYHSdNwTagQhXsOlQi",
   "isAdmin": false,
   "isVIP": false,
   "createdAt": {
-    "$date": "2022-11-30T06:24:45.801Z"
+    "$date": "2022-12-04T12:54:33.306Z"
   },
   "updatedAt": {
-    "$date": "2022-11-30T06:24:45.801Z"
+    "$date": "2022-12-04T13:35:58.556Z"
   },
   "__v": 0
 },{
   "_id": {
-    "$oid": "6386f73bdf59c60fa78daf45"
+    "$oid": "638c98d05a51bf90740f4530"
   },
-  "firstName": "nonvip2",
-  "lastName": "nonvip2",
-  "email": "nonvip2@gmail.com",
-  "password": "$2b$10$j6CjsVWhDtm1IM5s93YcAOTpktOyiWGo7DDK7AHaA084T4VbFsCMK",
+  "firstName": "test",
+  "lastName": "test",
+  "email": "test@gmail.com",
+  "password": "$2b$10$/naf2RED34yuFrhqeKaonede.B/rxkXEfR6RKIuS1sq8lN6iucHei",
   "isAdmin": false,
   "isVIP": false,
   "createdAt": {
-    "$date": "2022-11-30T06:24:59.421Z"
+    "$date": "2022-12-04T12:55:44.486Z"
   },
   "updatedAt": {
-    "$date": "2022-11-30T06:24:59.421Z"
-  },
-  "__v": 0
-},{
-  "_id": {
-    "$oid": "6386f757df59c60fa78daf48"
-  },
-  "firstName": "vip2",
-  "lastName": "vip2",
-  "email": "vip2@gmail.com",
-  "password": "$2b$10$0J4PwlWGxDZscBepzrY8teoabfeKeG3XhoJuG8V2fmdF1Nw1g7ika",
-  "isAdmin": false,
-  "isVIP": true,
-  "createdAt": {
-    "$date": "2022-11-30T06:25:27.581Z"
-  },
-  "updatedAt": {
-    "$date": "2022-11-30T06:25:27.581Z"
+    "$date": "2022-12-04T12:55:44.486Z"
   },
   "__v": 0
 }]
