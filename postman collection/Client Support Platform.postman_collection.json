@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"firstName\": \"vip2\",\n    \"lastName\": \"vip2\",\n    \"email\": \"vip2@gmail.com\",\n    \"password\": \"Vip12345\",\n    \"isAdmin\": false,\n    \"isVIP\": true\n}",
+							"raw": "{\n    \"firstName\": \"test\",\n    \"lastName\": \"test\",\n    \"email\": \"test@gmail.com\",\n    \"password\": \"Test1234\",\n    \"isAdmin\": false,\n    \"isVIP\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -54,7 +54,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "{{jwt}}",
+									"value": "",
 									"type": "string"
 								}
 							]
@@ -163,18 +163,20 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}complaint?page=1&limit=1",
+							"raw": "{{URL}}complaint",
 							"host": [
 								"{{URL}}complaint"
 							],
 							"query": [
 								{
 									"key": "page",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "limit",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								}
 							]
 						}
@@ -206,12 +208,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL}}complaint/6386fd9136f3de03b45ee693",
+							"raw": "{{URL}}complaint/638ca56fec511ea04eeae97f",
 							"host": [
 								"{{URL}}complaint"
 							],
 							"path": [
-								"6386fd9136f3de03b45ee693"
+								"638ca56fec511ea04eeae97f"
 							]
 						}
 					},
@@ -233,7 +235,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL}}complaint/admin?status=rejected",
+							"raw": "{{URL}}complaint/admin?sort=asc&status=rejected",
 							"host": [
 								"{{URL}}complaint"
 							],
@@ -243,13 +245,77 @@
 							"query": [
 								{
 									"key": "sort",
-									"value": "desc",
-									"disabled": true
+									"value": "asc"
 								},
 								{
 									"key": "status",
 									"value": "rejected"
 								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Up Down grade client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}user/638c98895a51bd90740f452d?method=downgrade",
+							"host": [
+								"{{URL}}user"
+							],
+							"path": [
+								"638c98895a51bd90740f452d"
+							],
+							"query": [
+								{
+									"key": "method",
+									"value": "downgrade"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search users by name",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}user/test",
+							"host": [
+								"{{URL}}user"
+							],
+							"path": [
+								"test"
 							]
 						}
 					},
